@@ -1,3 +1,74 @@
 ---
-return Astro.redirect('/login');
+import {Code} from 'astro/components';
 ---
+
+<div>
+<strong>Welcome to headless.garden</strong>
+<br/>
+<span>What if we reimagined Twitter as a headless, open social network?</span>
+<br/>
+<span>Fast. Free. Zero ads or tracking. Built to be built on.</span>
+<br/>
+<br/>
+<span>Visit <a href='/login'>/login</a> to request an invite, then ping @fks to complete setup.</span>
+<span>Not all features will work until you've completed setup.</span>
+<br/>
+<br/>
+<span>A sandbox UI is available as a proof of concept, but most features are still API only for now.</span>
+<br/>
+<span>Example: <a href='/sandbox/u/fks'>/sandbox/u/fks</a></span>
+<br/>
+
+<Code lang="ts" code={`// OAUTH: (Start here!) 
+// - Authenticate with GitHub creates a new user in the database.
+// - You must visit this URL in a browser. It returns its response via redirect.
+// - NOTE: This is still incomplete for the signup use-case, ping @fks to sign up.
+function request(url: '/login', params: {}): Promise<ResponseFormat<undefined>>;
+
+// RPC: 
+// - JSON requests/responses for executing commands against the API.
+// - On success, {data} is populated and {error} is null.
+// - On failure, {error} is populated and {data} is null.
+// RPC Authentication:
+// - If you hit these endpoints in the browser, your access cookie should be sent automatically. 
+// - Otherwise, you'll need an "Authorization" header with a valid JWT token (ex: "Bearer ...").
+function request(url: '/api/feed.list', params: {user: string}): Promise<ResponseFormat<Post[]>>;
+function request(url: '/api/users.info', params: {user: string}): Promise<ResponseFormat<UserProfile>>;
+function request(url: '/api/users.list', params: {}): Promise<ResponseFormat<UserProfile[]>>;
+function request(url: '/api/posts.info', params: {post: string}): Promise<ResponseFormat<Post>>;
+function request(url: '/api/posts.list', params: {user: string}): Promise<ResponseFormat<Post[]>>;
+function request(url: '/api/posts.create', params: {content: string}): Promise<ResponseFormat<Post>>;
+function request(url: '/api/posts.interact', params: {post: string, action: 'like' | 'share'}): Promise<ResponseFormat<boolean>>;
+function request(url: '/api/relationships.create', params: {user: string}): Promise<ResponseFormat<boolean>>;
+function request(url: '/api/relationships.delete', params: {user: string}): Promise<ResponseFormat<boolean>>;
+  
+interface ResponseFormat<T> {
+  data: T | null;
+  error: any | null;
+}
+  `} />
+  </div>
+<style is:global>
+body, html {
+  height: 100%;
+  display: grid;
+  background-image: linear-gradient(120deg, #111 0%, #123 100%);
+  font-family: 'Roboto', sans-serif;
+}
+div { /* thing to center */
+  margin: auto;
+  color: #BBB;
+}
+strong {
+  color: white;
+}
+pre {
+  border: 1px solid #BBB;
+  border-radius: 6px;
+  padding: 1rem;
+  box-shadow: 3px 3px 0px 3px white;
+}
+a {
+  color: white;
+}
+</style>
