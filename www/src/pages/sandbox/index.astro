@@ -6,12 +6,12 @@ import ComposeFAB from "../../components/ComposeFAB.astro";
 import Post from "../../components/Post.astro";
 import Profile from "../../components/Profile.astro";
 
-const {data: user} = await (await fetch('http://localhost:3000/api/users.info?user=me', {
+const {data: user} = await (await fetch(Astro.url.origin + '/api/users.info?user=me', {
     headers: {
         cookie: Astro.request.headers.get('cookie') || undefined
     }
 })).json();
-const {data: posts} = await (await fetch('http://localhost:3000/api/feed.list?user=me', {
+const {data: posts} = await (await fetch(Astro.url.origin + '/api/feed.list?user=me', {
     headers: {
         cookie: Astro.request.headers.get('cookie') || undefined
     }

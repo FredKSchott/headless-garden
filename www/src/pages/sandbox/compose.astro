@@ -2,22 +2,18 @@
 import "@acab/reset.css";
 import "../../main.css";
 
+console.log(Astro.request.method);
+ 
 if (Astro.request.method === 'POST') {
   const queryString = new URLSearchParams([...(await Astro.request.formData()).entries() ] as string[][]).toString()
   console.log(queryString);
-  const {data: post} = await (await fetch(`http://localhost:3000/api/posts.create?${queryString}`, {
+  (await fetch(`${Astro.url.origin}/api/posts.create?${queryString}`, {
       headers: {
           cookie: Astro.request.headers.get('cookie') || undefined
       }
-  })).json();
-  return Astro.redirect('/');
+  }));
+  return Astro.redirect('/sandbox/');
 }
-
-const {data: user} = await (await fetch('http://localhost:3000/api/users.info?user=me', {
-    headers: {
-        cookie: Astro.request.headers.get('cookie') || undefined
-    }
-})).json();
 ---
 <!DOCTYPE html>
 <html lang="en">

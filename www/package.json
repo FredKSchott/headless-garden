@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@acab/reset.css": "^0.5.3",
+    "@astrojs/vercel": "^2.3.3",
     "@supabase/supabase-js": "^2.0.5",
     "astro": "^1.6.0",
     "astro-remote": "^0.2.3",

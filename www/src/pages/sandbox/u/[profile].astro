@@ -1,18 +1,18 @@
 ---
 import "@acab/reset.css";
-import "../../main.css";
-import Header from "../../components/Header.astro";
-import ComposeFAB from "../../components/ComposeFAB.astro";
-import Post from "../../components/Post.astro";
-import Profile from "../../components/Profile.astro";
+import "../../../main.css";
+import Header from "../../../components/Header.astro";
+import ComposeFAB from "../../../components/ComposeFAB.astro";
+import Post from "../../../components/Post.astro";
+import Profile from "../../../components/Profile.astro";
 
 console.log('BOOO', Astro.params.user);
-const {data: user} = await (await fetch(`http://localhost:3000/api/users.info?user=${Astro.params.profile}`, {
+const {data: user} = await (await fetch(`${Astro.url.origin}/api/users.info?user=${Astro.params.profile}`, {
     headers: {
         cookie: Astro.request.headers.get('cookie') || undefined
     }
 })).json();
-const {data: posts} = await (await fetch(`http://localhost:3000/api/posts.list?user=${Astro.params.profile}`, {
+const {data: posts} = await (await fetch(`${Astro.url.origin}/api/posts.list?user=${Astro.params.profile}`, {
     headers: {
         cookie: Astro.request.headers.get('cookie') || undefined
     }

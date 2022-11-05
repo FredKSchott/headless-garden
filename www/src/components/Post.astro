@@ -1,14 +1,6 @@
 ---
 import Time from "./Time.astro";
-import { Markdown } from "astro-remote";
 import Avatar from "./Avatar.astro";
-import CodeBlock from "./CodeBlock.astro";
-import CodeSpan from "./CodeSpan.astro";
-
-import Note from "./Note.astro";
-import type { Post } from "../utils/data";
-import Separator from "./Separator.astro";
-
 const { post, isReshare } = Astro.props;
 ---
 
@@ -16,7 +8,7 @@ const { post, isReshare } = Astro.props;
   <Avatar url={post.author.avatar_url} />
   <main>
     {isReshare && <div class="reshare-msg">Re-shared!</div>}
-      <a class="author" href={`/sandbox/${post.author.handle}`}>
+      <a class="author" href={`/sandbox/u/${post.author.handle}`}>
       <span class="name">{post.author.name}</span>
       <span class="details">
         <span class="username">@{post.author.handle}</span>
