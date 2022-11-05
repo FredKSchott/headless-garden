@@ -1,0 +1,72 @@
+---
+import "@acab/reset.css";
+import "../../main.css";
+import Header from "../../components/Header.astro";
+import ComposeFAB from "../../components/ComposeFAB.astro";
+import Post from "../../components/Post.astro";
+import Profile from "../../components/Profile.astro";
+
+console.log('BOOO', Astro.params.user);
+const {data: user} = await (await fetch(`http://localhost:3000/api/users.info?user=${Astro.params.profile}`, {
+    headers: {
+        cookie: Astro.request.headers.get('cookie') || undefined
+    }
+})).json();
+const {data: posts} = await (await fetch(`http://localhost:3000/api/posts.list?user=${Astro.params.profile}`, {
+    headers: {
+        cookie: Astro.request.headers.get('cookie') || undefined
+    }
+})).json();
+
+console.log(posts, user);
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <title>nmoo's Feed</title>
+  </head>
+  <body>
+    <Profile {user} />
+    <Header {user} />
+    <ul>
+      {
+        posts.map((post: any) => (
+          <li>
+            <Post {post} isReshare={post.author.id !== user.id} />
+          </li>
+        ))
+      }
+    </ul>
+    <ComposeFAB /> 
+  </body>
+</html>
+
+<style>
+
+  body {
+    background-image: linear-gradient(120deg, #111 0%, #123 100%);
+  }
+  ul {
+    margin: 0 auto;
+    max-width: 600px;
+    border: 1px solid var(--color-border);
+    border-top: 0;
+    border-bottom: 0;
+    min-height: 60vh;
+    background-color: #111;
+  }
+
+  li + li {
+    border-top: 1px solid var(--color-border);
+  }
+</style>

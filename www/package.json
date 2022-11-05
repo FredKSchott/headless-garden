@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@acab/reset.css": "^0.5.3",
+    "@supabase/supabase-js": "^2.0.5",
     "astro": "^1.6.0",
     "astro-remote": "^0.2.3",
     "date-fns": "^2.29.3",
@@ -19,7 +20,8 @@
     "gray-matter": "^4.0.3"
   },
   "devDependencies": {
-    "@types/node": "^18.11.9"
+    "@types/node": "^18.11.9",
+    "supabase": "^1.11.7"
   },
   "license": "MIT"
 }

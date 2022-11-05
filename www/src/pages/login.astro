@@ -1,0 +1,45 @@
+---
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro</title>
+  </head>
+  <body>
+    <h1>Astro</h1>
+    <script>
+      import { createClient } from "@supabase/supabase-js";
+      import type { Database } from "../types-supabase";
+      // Create a single supabase client for interacting with your database
+      const supabase = createClient<Database>(
+        import.meta.env.SUPABASE_URL,
+        import.meta.env.SUPABASE_ANON_KEY
+      );
+      supabase.auth.onAuthStateChange((event, session) => {
+        console.log('YAY', event, session);
+        if (event === "SIGNED_OUT" || event === "USER_DELETED") {
+          // delete cookies on sign out
+          const expires = new Date(0).toUTCString();
+          document.cookie = `my-access-token=; path=/; expires=${expires}; SameSite=Lax; secure`;
+          document.cookie = `my-refresh-token=; path=/; expires=${expires}; SameSite=Lax; secure`;
+        } else if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
+          const maxAge = 100 * 365 * 24 * 60 * 60; // 100 years, never expires
+          document.cookie = `my-access-token=${session.access_token}; path=/; max-age=${maxAge}; SameSite=Lax; secure`;
+          document.cookie = `my-refresh-token=${session.refresh_token}; path=/; max-age=${maxAge}; SameSite=Lax; secure`;
+          window.location.href = '/sandbox/';
+        }
+      });
+
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "github",
+        options: {
+          redirectTo: 'http://localhost:3000/login'
+        }
+      });
+    </script>
+  </body>
+</html>

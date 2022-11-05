@@ -1,11 +1,11 @@
 ---
-import config from "../../../config.json";
+const {title} = Astro.props;
 ---
 
 <header>
   <div>
     <div></div>
-    <h2>{config.profile.name}</h2>
+    <h2>{title}</h2>
   </div>
 </header>
 

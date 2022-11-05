@@ -1,18 +1,17 @@
 ---
-import config from "../../../config.json";
-
 interface Props {
+  url: string;
   size?: "small" | "large";
   border?: boolean;
 }
 
-const { size = "small", border = false } = Astro.props;
+const { url, size = "small", border = false } = Astro.props;
 const unit = size === "small" ? 3 : 6;
 ---
 
 <img
   class:list={{ avatar: true, border }}
-  src={config.avatar}
+  src={url}
   width="48"
   height="48"
 />

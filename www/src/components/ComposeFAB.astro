@@ -1,0 +1,64 @@
+
+<a href="/compose" class="circle">
+    <div class="vertical"></div>
+    <div class="horizontal"></div>
+  </a>
+  <style>
+    .vertical, .horizontal {
+      position: relative;
+      left: 26px;
+      top: 19px;
+      width: 2px;
+      height: 16px;
+      background-color: white;
+    }
+    
+    .horizontal {
+      position: relative;
+      top: 3px;
+      transform: rotate(90deg);
+    }
+    
+    .circle {
+
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      width: 54px;
+      height: 54px;
+      transform: scale(.8);
+      background-color: #299;
+      border-radius: 50%;
+    }
+    .circle .vertical, .circle .horizontal {
+      transition: transform 0.2s, width 0.2s, height 0.2s, top 0.2s, left 0.2s;
+    }
+    .circle .horizontal {
+      transition: transform 0.2s, width 0.2s, height 0.2s, top 0.2s, left 0.2s;
+    }
+    .circle:hover .vertical, .circle:hover .horizontal {
+      width: 4px;
+      height: 4px;
+      top: 17px;
+      left: 32px;
+      transform: rotate(220deg);
+    }
+    .circle:hover .horizontal {
+      width: 4px;
+      height: 19px;
+      top: 15px;
+      left: 24px;
+      transform: rotate(220deg);
+    }
+    .circle:hover .horizontal:before {
+      content: "";
+      display: block;
+      width: 0px;
+      height: 0px;
+      border-left: 2px solid transparent;
+      border-right: 2px solid transparent;
+      border-bottom: 4px solid white;
+      position: relative;
+      top: -5px;
+    }
+    </style>

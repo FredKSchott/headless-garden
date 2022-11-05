@@ -2,7 +2,6 @@
 import Time from "./Time.astro";
 import { Markdown } from "astro-remote";
 import Avatar from "./Avatar.astro";
-import config from "../../../config.json";
 import CodeBlock from "./CodeBlock.astro";
 import CodeSpan from "./CodeSpan.astro";
 
@@ -10,26 +9,23 @@ import Note from "./Note.astro";
 import type { Post } from "../utils/data";
 import Separator from "./Separator.astro";
 
-interface Props extends Post {}
-const { content, data, name } = Astro.props;
+const { post, isReshare } = Astro.props;
 ---
 
-<article class="post" data-post-id={name} id={name}>
-  <Avatar />
+<article class="post" data-post-id={post.id} id={post.id}>
+  <Avatar url={post.author.avatar_url} />
   <main>
-    <div class="author">
-      <span class="name">{config.profile.name}</span>
+    {isReshare && <div class="reshare-msg">Re-shared!</div>}
+      <a class="author" href={`/sandbox/${post.author.handle}`}>
+      <span class="name">{post.author.name}</span>
       <span class="details">
-        <span class="username">@{config.handle}</span>
+        <span class="username">@{post.author.handle}</span>
         <span class="separator"></span>
-        <Time value={data.date} />
+        <Time value={new Date(post.created_at)} />
       </span>
-    </div>
+    </a>
     <div class="body">
-      <Markdown
-        content={content}
-        components={{ CodeBlock, CodeSpan, Note, hr: Separator }}
-      />
+      {post.content}
     </div>
   </main>
 </article>
@@ -38,13 +34,20 @@ const { content, data, name } = Astro.props;
   .post {
     width: 100%;
     display: grid;
+    align-items: center;
     grid-template-columns: 3rem minmax(0, 1fr);
     gap: 0.75rem;
     padding: 0.75rem 1rem;
   }
 
-  main {
-    padding-bottom: 2em;
+  .reshare-msg {
+    font-size: .8rem;
+    color: #888;
+  }
+
+  .author {
+    color: inherit;
+    text-decoration: none;
   }
   .body {
     display: flex;

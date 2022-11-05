@@ -4,9 +4,11 @@ import { fileURLToPath } from "node:url";
 import matter from "gray-matter";
 
 export interface Post {
-  name: string;
-  data: { title: string, date: Date, draft?: boolean }
+  id: string;
+  user_ud: string;
   content: string;
+  created_at: string;
+  updated_at: string;
 }
 
 async function read(dir: URL): Promise<Post[]> {
