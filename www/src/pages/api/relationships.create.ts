@@ -12,13 +12,20 @@ export async function all({ url, cookies, request }: { url: URL, request: Reques
   if (!accessToken) {
     throw new Error('No User');
   }
-  const userResponse = (await supabase.auth.getUser(accessToken));
-  console.log( userResponse,  userResponse.data.user?.id)
+  
+  const followerResponse = (await supabase.auth.getUser(accessToken));
+  const followedResponse = await supabase
+    .from("profiles")
+    .select(`id`)
+    .eq("handle", url.searchParams.get("user"))
+    .limit(1);
+  const userId = followedResponse.data![0].id;
+
   const { data, error } = await supabase
     .from("relationships")
     .insert({
-      follower_id: userResponse.data.user?.id!,
-      followed_id: url.searchParams.get("user")!,
+      follower_id: followerResponse.data.user?.id!,
+      followed_id: userId!,
     })
     .select();
 

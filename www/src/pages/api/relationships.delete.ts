@@ -12,17 +12,21 @@ export async function all({ url, cookies, request }: { url: URL, request: Reques
   if (!accessToken) {
     throw new Error('No User');
   }
-  const userResponse = (await supabase.auth.getUser(accessToken));
-  console.log( userResponse,  userResponse.data.user?.id)
-  const { data, error } = await supabase
+  const followerResponse = (await supabase.auth.getUser(accessToken));
+  const followedResponse = await supabase
+    .from("profiles")
+    .select(`id`)
+    .eq("handle", url.searchParams.get("user"))
+    .limit(1);
+  const { error } = await supabase
     .from("relationships")
     .delete({count: 'exact'})
-    .eq('follower_id', userResponse.data.user?.id)
-    .eq('followed_id', url.searchParams.get("user"));
+    .eq('follower_id', followerResponse.data.user?.id)
+    .eq('followed_id', followedResponse.data![0].id);
 
   return {
     body: JSON.stringify({
-      data,
+      data: true,
       error,
     }),
   };

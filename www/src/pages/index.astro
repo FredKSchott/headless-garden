@@ -1,51 +1,58 @@
 ---
+import { Code } from "astro/components";
 ---
 
 <div>
 <strong>Welcome to headless.garden</strong>
 <br/>
-<span>What if we reimagined Twitter as a headless, open social network?</span>
+<span>The first headless social network.</span>
 <br/>
-<span>Fast. Free. Zero ads or tracking. Built to be built on. It's literally just an API.</span>
-<br/>
-<br/>
-<span>Visit <a href='/login'>/login</a> to request an invite, then ping @fks to complete setup.</span>
-<span>Not all features will work until you've completed setup.</span>
+<span>Free. Fast. Zero ads or tracking. Built to be built on. It's literally just an API.</span>
 <br/>
 <br/>
-<span>A sandbox UI is available as a proof of concept, but most features are still API only for now. <a href='/sandbox/u/fks'>(Example)</a></span>
+<div id="login-message">
+<span>Visit <a href='/login'>/login</a> to request an invite.</span>
+<br/>
+</div>
+<div id="access-token" />
+
+<pre id="docs" class="astro-code" style="background-color: #0d1117; overflow-x: auto;"><code set:html={`<span class="line"></span>
+  <span class="line"><span style="color: #8B949E">// API Cheatsheet: </span></span>
+  <span class="line"><span style="color: #8B949E">// - JSON requests/responses for executing commands against the API.</span></span>
+  <span class="line"><span style="color: #8B949E">// - On success, {data} is populated and {error} is null.</span></span>
+  <span class="line"><span style="color: #8B949E">// - On failure, {error} is populated and {data} is null.</span></span>
+
+  <span class="line"><span style="color: #A5D6FF">https://headless.garden/api/feed.list?user=fks</span>
+  <span class="line"><span style="color: #A5D6FF">https://headless.garden/api/users.info?user=fks</span>
+  <span class="line"><span style="color: #A5D6FF">https://headless.garden/api/users.list</span>
+  <span class="line"><span style="color: #A5D6FF">https://headless.garden/api/posts.info?post=ID</span>
+  <span class="line"><span style="color: #A5D6FF">https://headless.garden/api/posts.list?user=fks</span>
+  <span class="line"><span style="color: #A5D6FF">https://headless.garden/api/posts.create?content=MESSAGE</span>
+  <span class="line"><span style="color: #A5D6FF">https://headless.garden/api/posts.interact?post=ID&amp;action=share</span>
+  <span class="line"><span style="color: #A5D6FF">https://headless.garden/api/relationships.create?user=fks</span>
+  <span class="line"><span style="color: #A5D6FF">https://headless.garden/api/relationships.delete?user=fks</span>
+  <span class="line"></span>`} /></pre>
+  </div>
+
+<script is:inline>
+  if (window.location.search.includes('login-complete')) {
+    document.getElementById('login-message').innerHTML = `
+      <span style="color: #8F9; font-weight: bold;">Login complete!</span><br/>
+      <span style="color: #595;">Note: Not all features will work until your invite has been accepted.<br/>Ping @fks to complete setup.</span>
+    `;
+    document.getElementById('access-token').innerHTML = `
+      <pre style="background-color: #0d1117; overflow-x: auto;"><code><span class="line"><span style="color: #8B949E">// Your API Access Token:</span></span>
+<span class="line"><span style="color: #8B949E">// - If you hit these endpoints in the browser, your access cookie should be sent automatically via cookie. </span></span>
+<span class="line"><span style="color: #8B949E">// - Otherwise, you'll need this token with an "Authorization" header (ex: "Bearer ...").</span></span>
+<span class="line"><span style="color: #8B949E">// - Currently, tokens expire after ~5 min so you'll need to revisit /login to refresh it.</span></span>
+
+${JSON.parse(window.localStorage.getItem('sb-ixebnnxkmtfbfydfyxjc-auth-token')).access_token}</code></pre>
+<br/>
+    `;
+  }
+</script>
 <br/>
 
-<pre class="astro-code" style="background-color: #0d1117; overflow-x: auto;"><code set:html={`
-<span class="line"><span style="color: #8B949E">// OAUTH: (Start here!) </span></span>
-<span class="line"><span style="color: #8B949E">// - Authenticate with GitHub creates a new user in the database.</span></span>
-<span class="line"><span style="color: #8B949E">// - You must visit this URL in a browser. It returns its response via redirect.</span></span>
-<span class="line"><span style="color: #8B949E">// - NOTE: This is still incomplete for the signup use-case, ping @fks to sign up.</span></span>
-<span class="line"><span style="color: #FF7B72">function</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">request</span><span style="color: #C9D1D9">(</span><span style="color: #FFA657">url</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">'/login'</span><span style="color: #C9D1D9">, </span><span style="color: #FFA657">params</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> {})</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Promise</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">ResponseFormat</span><span style="color: #C9D1D9">&lt;</span><span style="color: #79C0FF">undefined</span><span style="color: #C9D1D9">&gt;&gt;;</span></span>
-<span class="line"></span>
-<span class="line"><span style="color: #8B949E">// RPC: </span></span>
-<span class="line"><span style="color: #8B949E">// - JSON requests/responses for executing commands against the API.</span></span>
-<span class="line"><span style="color: #8B949E">// - On success, {data} is populated and {error} is null.</span></span>
-<span class="line"><span style="color: #8B949E">// - On failure, {error} is populated and {data} is null.</span></span>
-<span class="line"><span style="color: #8B949E">// RPC Authentication:</span></span>
-<span class="line"><span style="color: #8B949E">// - If you hit these endpoints in the browser, your access cookie should be sent automatically. </span></span>
-<span class="line"><span style="color: #8B949E">// - Otherwise, you'll need an "Authorization" header with a valid JWT token (ex: "Bearer ...").</span></span>
-<span class="line"><span style="color: #FF7B72">function</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">request</span><span style="color: #C9D1D9">(</span><span style="color: #FFA657">url</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">'/api/feed.list'</span><span style="color: #C9D1D9">, </span><span style="color: #FFA657">params</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> {</span><span style="color: #FFA657">user</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">})</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Promise</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">ResponseFormat</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">Post</span><span style="color: #C9D1D9">[]&gt;&gt;;</span></span>
-<span class="line"><span style="color: #FF7B72">function</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">request</span><span style="color: #C9D1D9">(</span><span style="color: #FFA657">url</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">'/api/users.info'</span><span style="color: #C9D1D9">, </span><span style="color: #FFA657">params</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> {</span><span style="color: #FFA657">user</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">})</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Promise</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">ResponseFormat</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">UserProfile</span><span style="color: #C9D1D9">&gt;&gt;;</span></span>
-<span class="line"><span style="color: #FF7B72">function</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">request</span><span style="color: #C9D1D9">(</span><span style="color: #FFA657">url</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">'/api/users.list'</span><span style="color: #C9D1D9">, </span><span style="color: #FFA657">params</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> {})</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Promise</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">ResponseFormat</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">UserProfile</span><span style="color: #C9D1D9">[]&gt;&gt;;</span></span>
-<span class="line"><span style="color: #FF7B72">function</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">request</span><span style="color: #C9D1D9">(</span><span style="color: #FFA657">url</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">'/api/posts.info'</span><span style="color: #C9D1D9">, </span><span style="color: #FFA657">params</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> {</span><span style="color: #FFA657">post</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">})</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Promise</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">ResponseFormat</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">Post</span><span style="color: #C9D1D9">&gt;&gt;;</span></span>
-<span class="line"><span style="color: #FF7B72">function</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">request</span><span style="color: #C9D1D9">(</span><span style="color: #FFA657">url</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">'/api/posts.list'</span><span style="color: #C9D1D9">, </span><span style="color: #FFA657">params</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> {</span><span style="color: #FFA657">user</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">})</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Promise</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">ResponseFormat</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">Post</span><span style="color: #C9D1D9">[]&gt;&gt;;</span></span>
-<span class="line"><span style="color: #FF7B72">function</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">request</span><span style="color: #C9D1D9">(</span><span style="color: #FFA657">url</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">'/api/posts.create'</span><span style="color: #C9D1D9">, </span><span style="color: #FFA657">params</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> {</span><span style="color: #FFA657">content</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">})</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Promise</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">ResponseFormat</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">Post</span><span style="color: #C9D1D9">&gt;&gt;;</span></span>
-<span class="line"><span style="color: #FF7B72">function</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">request</span><span style="color: #C9D1D9">(</span><span style="color: #FFA657">url</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">'/api/posts.interact'</span><span style="color: #C9D1D9">, </span><span style="color: #FFA657">params</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> {</span><span style="color: #FFA657">post</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">, </span><span style="color: #FFA657">action</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">'like'</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">|</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">'share'</span><span style="color: #C9D1D9">})</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Promise</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">ResponseFormat</span><span style="color: #C9D1D9">&lt;</span><span style="color: #79C0FF">boolean</span><span style="color: #C9D1D9">&gt;&gt;;</span></span>
-<span class="line"><span style="color: #FF7B72">function</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">request</span><span style="color: #C9D1D9">(</span><span style="color: #FFA657">url</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">'/api/relationships.create'</span><span style="color: #C9D1D9">, </span><span style="color: #FFA657">params</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> {</span><span style="color: #FFA657">user</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">})</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Promise</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">ResponseFormat</span><span style="color: #C9D1D9">&lt;</span><span style="color: #79C0FF">boolean</span><span style="color: #C9D1D9">&gt;&gt;;</span></span>
-<span class="line"><span style="color: #FF7B72">function</span><span style="color: #C9D1D9"> </span><span style="color: #D2A8FF">request</span><span style="color: #C9D1D9">(</span><span style="color: #FFA657">url</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #A5D6FF">'/api/relationships.delete'</span><span style="color: #C9D1D9">, </span><span style="color: #FFA657">params</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> {</span><span style="color: #FFA657">user</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">string</span><span style="color: #C9D1D9">})</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">Promise</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">ResponseFormat</span><span style="color: #C9D1D9">&lt;</span><span style="color: #79C0FF">boolean</span><span style="color: #C9D1D9">&gt;&gt;;</span></span>
-<span class="line"><span style="color: #C9D1D9">  </span></span>
-<span class="line"><span style="color: #FF7B72">interface</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">ResponseFormat</span><span style="color: #C9D1D9">&lt;</span><span style="color: #FFA657">T</span><span style="color: #C9D1D9">&gt; {</span></span>
-<span class="line"><span style="color: #C9D1D9">  </span><span style="color: #FFA657">data</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #FFA657">T</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">|</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">null</span><span style="color: #C9D1D9">;</span></span>
-<span class="line"><span style="color: #C9D1D9">  </span><span style="color: #FFA657">error</span><span style="color: #FF7B72">:</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">any</span><span style="color: #C9D1D9"> </span><span style="color: #FF7B72">|</span><span style="color: #C9D1D9"> </span><span style="color: #79C0FF">null</span><span style="color: #C9D1D9">;</span></span>
-<span class="line"><span style="color: #C9D1D9">}</span></span>
-<span class="line"><span style="color: #C9D1D9">  </span></span>`} /></pre>
-</div>
 
 <style is:global>
   
@@ -55,9 +62,10 @@ body, html {
   background-image: linear-gradient(120deg, #111 0%, #123 100%);
   font-family: 'Roboto', sans-serif;
 }
-div { /* thing to center */
+body > div { /* thing to center */
   margin: auto;
   color: #BBB;
+  max-width: 800px;
 }
 strong {
   color: white;
