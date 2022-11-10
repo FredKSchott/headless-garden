@@ -3,75 +3,8 @@ import { Code } from "astro/components";
 ---
 
 <div>
-<strong>Welcome to headless.garden</strong>
-<br/>
-<span>The first headless social network. Built to be built on.</span>
-<br/>
-<span>Free. Fast. Zero ads or tracking. It's literally just an API.</span>
-<br/>
-<span>Have fun!</span>
-<br/>
-<br/>
-<div id="login-message">
-<span>Visit <a href='/login'>/login</a> to request an invite.</span>
+  <Code lang="ts" code={`// Test`} />
 </div>
-<br/>
-<div id="access-token" />
-
-<Code lang="ts" code={`// API Cheatsheet: 
-// - JSON requests/responses for executing commands against the API.
-// - On success, {data} is populated and {error} is null.
-// - On failure, {error} is populated and {data} is null.
-
-https://headless.garden/api/feed.list?user=me
-https://headless.garden/api/users.info?user=fks
-https://headless.garden/api/users.list
-https://headless.garden/api/posts.info?post=ID
-https://headless.garden/api/posts.list?user=fks
-https://headless.garden/api/posts.create?content=MESSAGE
-https://headless.garden/api/posts.interact?post=ID&action=share
-https://headless.garden/api/relationships.create?user=fks
-https://headless.garden/api/relationships.delete?user=fks`} />
-
-<pre id="docs" class="astro-code" style="background-color: #0d1117; overflow-x: auto;"><code set:html={`<span class="line"></span><span class="line"><span style="color: #8B949E">// API Cheatsheet: </span></span>
-<span class="line"><span style="color: #8B949E">// - JSON requests/responses for executing commands against the API.</span></span>
-<span class="line"><span style="color: #8B949E">// - On success, {data} is populated and {error} is null.</span></span>
-<span class="line"><span style="color: #8B949E">// - On failure, {error} is populated and {data} is null.</span></span>
-
-<span class="line"><span style="color: #A5D6FF">https://headless.garden/api/feed.list?user=me</span>
-<span class="line"><span style="color: #A5D6FF">https://headless.garden/api/users.info?user=fks</span>
-<span class="line"><span style="color: #A5D6FF">https://headless.garden/api/users.list</span>
-<span class="line"><span style="color: #A5D6FF">https://headless.garden/api/posts.info?post=ID</span>
-<span class="line"><span style="color: #A5D6FF">https://headless.garden/api/posts.list?user=fks</span>
-<span class="line"><span style="color: #A5D6FF">https://headless.garden/api/posts.create?content=MESSAGE</span>
-<span class="line"><span style="color: #A5D6FF">https://headless.garden/api/posts.interact?post=ID&amp;action=share</span>
-<span class="line"><span style="color: #A5D6FF">https://headless.garden/api/relationships.create?user=fks</span>
-<span class="line"><span style="color: #A5D6FF">https://headless.garden/api/relationships.delete?user=fks</span>
-<span class="line"></span>`} /></pre>
-  </div>
-
-<script is:inline>
-  if (window.location.search.includes('login-complete')) {
-    document.getElementById('login-message').innerHTML = `
-      <span style="color: #8F9; font-weight: bold;">Login complete! Welcome.</span><br/>
-      <span style="color: #595;">Note: Not all features will work until your invite has been accepted.<br/>Ping @fks to complete setup if you haven't yet.</span>
-    `;
-    document.getElementById('access-token').innerHTML = `
-      <pre style="background-color: #0d1117; overflow-x: auto;">
-<code><span class="line"><span style="color: #8B949E">// Your Access Token:</span></span>
-<span class="line"><span style="color: #8B949E">// - You can hit these endpoints directly via the browser.</span></span>
-<span class="line"><span style="color: #8B949E">// - Otherwise, you'll need to send this token via "Authorization" header (ex: "Bearer ...").</span></span>
-<span class="line"><span style="color: #8B949E">// - Currently, tokens expire after ~5 min so you'll need to revisit /login to refresh it.</span></span>
-
-<span class="line"><span style="color: #A5D6FF;">${JSON.parse(window.localStorage.getItem('sb-ixebnnxkmtfbfydfyxjc-auth-token')).access_token}</span>
-</code></pre>
-<br/>
-    `;
-  }
-</script>
-<br/>
-
-
 <style is:global>
   
 body, html {
