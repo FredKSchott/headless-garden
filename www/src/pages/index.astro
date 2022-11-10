@@ -18,6 +18,21 @@ import { Code } from "astro/components";
 <br/>
 <div id="access-token" />
 
+<Code lang="ts" code={`// API Cheatsheet: 
+// - JSON requests/responses for executing commands against the API.
+// - On success, {data} is populated and {error} is null.
+// - On failure, {error} is populated and {data} is null.
+
+https://headless.garden/api/feed.list?user=me
+https://headless.garden/api/users.info?user=fks
+https://headless.garden/api/users.list
+https://headless.garden/api/posts.info?post=ID
+https://headless.garden/api/posts.list?user=fks
+https://headless.garden/api/posts.create?content=MESSAGE
+https://headless.garden/api/posts.interact?post=ID&action=share
+https://headless.garden/api/relationships.create?user=fks
+https://headless.garden/api/relationships.delete?user=fks`} />
+
 <pre id="docs" class="astro-code" style="background-color: #0d1117; overflow-x: auto;"><code set:html={`<span class="line"></span><span class="line"><span style="color: #8B949E">// API Cheatsheet: </span></span>
 <span class="line"><span style="color: #8B949E">// - JSON requests/responses for executing commands against the API.</span></span>
 <span class="line"><span style="color: #8B949E">// - On success, {data} is populated and {error} is null.</span></span>
